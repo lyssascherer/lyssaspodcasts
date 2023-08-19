@@ -16,7 +16,7 @@ if bt_get_feed:
         episode_data = {
             "podcast_name": podcast_title,
             "episode_title": ut.clean_name(episode_data["title"]),
-            "episode_date": episode_data["published"],
+            "episode_day": datetime.date(podcast["entries"][0]["published_parsed"][0], podcast["entries"][0]["published_parsed"][1], podcast["entries"][0]["published_parsed"][2]).strftime("%Y-%m-%d"),
             "duration": episode_data["itunes_duration"],
         }
 
@@ -27,7 +27,7 @@ if bt_get_feed:
         st.markdown(
             f"""
             **Title:** {episode_data['episode_title']}\n
-            **Date:** {episode_data['episode_date']}\n
+            **Date:** {episode_data['episode_day']}\n
             **Duration:** {episode_data['duration']}\n
         """
         )

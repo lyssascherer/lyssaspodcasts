@@ -51,7 +51,7 @@ else:
             for i, episode in episodes.iterrows():
                 cols = st.columns(3)
                 cols[0].write(episode["episode_title"])
-                cols[1].write(episode["episode_date"])
+                cols[1].write(episode["episode_day"])
                 cols[2].markdown(
                     f'<a href="/My_Podcasts?podcast_name={podcast}&episode_name={episode["episode_title"]}" target="_self">See more</a>',
                     unsafe_allow_html=True,

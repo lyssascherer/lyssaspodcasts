@@ -60,7 +60,6 @@ episode_transcription = ut.process_episode(episode_name)
 st.markdown(
     f"""
     **Title:** {episode['episode_title']}\n
-    **Date:** {episode['episode_date']}\n
     **Date:** {episode['episode_day']}\n
     **Week:** {episode['episode_week']}\n
     **Duration:** {episode['duration']}\n

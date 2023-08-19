@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 import re
 import feedparser
+import datetime
 
 
 DOWNLOAD_ROOT = ""
@@ -37,14 +38,12 @@ def get_available_episodes():
                     episode = {
                         "podcast_name": podcast_name,
                         "episode_title": clean_name(episode["title"]),
-                        "episode_date": episode["published"],
+                        "published_parsed": episode["published_parsed"],
                         "duration": episode["itunes_duration"],
                     }
                     all_episodes.append(episode)
         episodes = pd.DataFrame(all_episodes)
-        episodes["episode_date"] = pd.to_datetime(
-            episodes["episode_date"], utc=True
-        )  # .dt.date
+        episodes["episode_date"] = pd.to_datetime(episodes["published_parsed"].apply(lambda x: datetime.date(x[0], x[1], x[2])))
         episodes["episode_day"] = pd.to_datetime(episodes["episode_date"]).dt.date
         episodes["episode_week"] = (
             pd.to_datetime(episodes["episode_date"]).dt.isocalendar().week
