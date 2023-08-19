@@ -39,16 +39,26 @@ def click_button_transcribe(podcast_name, episode_name):
         episode_transcription = ut.transcribe_and_extract_info_episode(
             podcast_name, episode_name
         )
-        st.markdown(
-            f"""
-            **Summary:** {episode_transcription['summary']}\n
-            **hosts:** {episode_transcription['hosts']}\n
-            **guests:** {episode_transcription['guests']}\n
-            **key_points:** {episode_transcription['key_points']}\n
-            **main_output:** {episode_transcription['main_output']}\n
-        """,
-            unsafe_allow_html=True,
-        )
+        hosts = episode_transcription.get('hosts', [])
+        guests = episode_transcription.get('guests', [])
+        key_points = episode_transcription.get('key_points', [])
+        st.markdown(f"**Summary:** {episode_transcription.get('summary', 'Not available')}")
+        if len(hosts):
+            st.markdown(f"**Hosts:**")
+            for host in hosts:
+                st.markdown(f"- {host}")
+
+        if len(guests):
+            st.markdown(f"**Guests:**")
+            for guest in guests:
+                st.markdown(f"- {guest}")
+        
+        if len(key_points):
+            st.markdown(f"**Key points:**")
+            for key_point in key_points:
+                st.markdown(f"- {key_point}")
+
+        st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
 
 
 episode = (
