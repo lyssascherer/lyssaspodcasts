@@ -3,9 +3,9 @@ import scripts.utils as ut
 
 
 podcast_rss = st.sidebar.text_input(
-    "Import new podcast", placeholder="RSS URL", key="feed_rss"
+    "Podcast's RSS link", placeholder="RSS URL", key="feed_rss"
 )
-bt_get_feed = st.sidebar.button("Get feed")
+bt_get_feed = st.sidebar.button("Get Latest Episode")
 
 
 if bt_get_feed:
@@ -56,4 +56,8 @@ if bt_get_feed:
                 st.markdown(f"- {key_point}")
 
         st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
+else:
+    st.header(f"Latest episode")
+    st.markdown("---")
+    st.markdown("Check the latest episode of your favorite podcast! Just write the RSS link of the podcast and click 'Get Latest Episode'.")
 
