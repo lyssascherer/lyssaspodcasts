@@ -33,7 +33,8 @@ else:
     if bt_get_feed:
         with st.spinner("Loading data... This might take a while.."):
             podcast_feed = ut.get_podcast_feed(new_feed_rss)
-        st.experimental_rerun()
+            st.success('Feed uploaded! Reload the page to see the episodes on the calendar.', icon="✅")
+        # st.experimental_rerun()
 
     weeks_episodes = df[
         (df["episode_date"].dt.year == year)
@@ -45,21 +46,24 @@ else:
     st.markdown(f"Week {week} of {year}")
     st.markdown("\n#### This weeks episodes")
 
-    for podcast in set(weeks_episodes["podcast_name"].values):
-        episodes = weeks_episodes[weeks_episodes["podcast_name"] == podcast]
-        with st.expander(f"{podcast} -- {len(episodes)} episodes this week"):
-            cols = st.columns(4)
-            cols[0].write("**Episode Name**")
-            cols[1].write("**Published date**")
-            cols[2].write("**Transcrition status**")
-
-            for i, episode in episodes.iterrows():
+    if len(weeks_episodes) == 0:
+        st.info("Still no episodes this week!")
+    else:
+        for podcast in set(weeks_episodes["podcast_name"].values):
+            episodes = weeks_episodes[weeks_episodes["podcast_name"] == podcast]
+            with st.expander(f"{podcast} -- {len(episodes)} episodes this week"):
                 cols = st.columns(4)
-                cols[0].write(episode["episode_title"])
-                cols[1].write(str(episode["episode_day"]))
-                is_transcribed = "Not Transcribed" if ut.process_episode(episode["episode_title"]) is None else "Transcribed"
-                cols[2].write(is_transcribed)
-                cols[3].markdown(
-                    f'<a href="/My_Podcasts?podcast_name={podcast}&episode_name={episode["episode_title"]}" target="_self">See more</a>',
-                    unsafe_allow_html=True,
-                )
+                cols[0].write("**Episode Name**")
+                cols[1].write("**Published date**")
+                cols[2].write("**Transcrition status**")
+
+                for i, episode in episodes.iterrows():
+                    cols = st.columns(4)
+                    cols[0].write(episode["episode_title"])
+                    cols[1].write(str(episode["episode_day"]))
+                    is_transcribed = "Not Transcribed" if ut.process_episode(episode["episode_title"]) is None else "Transcribed"
+                    cols[2].write(is_transcribed)
+                    cols[3].markdown(
+                        f'<a href="/My_Podcasts?podcast_name={podcast}&episode_name={episode["episode_title"]}" target="_self">See more</a>',
+                        unsafe_allow_html=True,
+                    )

@@ -31,34 +31,36 @@ if bt_get_feed:
             **Duration:** {episode_data['duration']}\n
         """
         )
+        try: 
+            episode_transcription = ut.transcribe_and_extract_info_episode(
+                podcast_title, episode_data["episode_title"]
+            )
 
-        episode_transcription = ut.transcribe_and_extract_info_episode(
-            podcast_title, episode_data["episode_title"]
-        )
+            hosts = episode_transcription.get('hosts', [])
+            guests = episode_transcription.get('guests', [])
+            key_points = episode_transcription.get('key_points', [])
+            st.markdown(f"**Summary:** {episode_transcription.get('summary', 'Not available')}")
+            if len(hosts):
+                st.markdown(f"**Hosts:**")
+                for host in hosts:
+                    host_summary = ut.get_summary_person_on_wikipedia(host)
+                    st.expander(f"{host}", expanded=False).markdown(f"{host_summary}")
 
-        hosts = episode_transcription.get('hosts', [])
-        guests = episode_transcription.get('guests', [])
-        key_points = episode_transcription.get('key_points', [])
-        st.markdown(f"**Summary:** {episode_transcription.get('summary', 'Not available')}")
-        if len(hosts):
-            st.markdown(f"**Hosts:**")
-            for host in hosts:
-                host_summary = ut.get_summary_person_on_wikipedia(host)
-                st.expander(f"{host}", expanded=False).markdown(f"{host_summary}")
+            if len(guests):
+                st.markdown(f"**Guests:**")
+                for guest in guests:
+                    guest_summary = ut.get_summary_person_on_wikipedia(guest)
+                    st.expander(f"{guest}", expanded=False).markdown(f"{guest_summary}")
+            
+            if len(key_points):
+                st.markdown(f"**Key points:**")
+                for key_point in key_points:
+                    st.markdown(f"- {key_point}")
 
-        if len(guests):
-            st.markdown(f"**Guests:**")
-            for guest in guests:
-                guest_summary = ut.get_summary_person_on_wikipedia(guest)
-                st.expander(f"{guest}", expanded=False).markdown(f"{guest_summary}")
-        
-        if len(key_points):
-            st.markdown(f"**Key points:**")
-            for key_point in key_points:
-                st.markdown(f"- {key_point}")
-
-        st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
-        st.markdown(f"**Keywords** {', '.join(episode_transcription.get('keywords', ['Not available']))}")
+            st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
+            st.markdown(f"**Keywords** {', '.join(episode_transcription.get('keywords', ['Not available']))}")
+        except Exception as e:
+            st.error("The OpenAI and Modal labs secret tokens are unavailable, so it is not possible to make the request to get extra information about the podcast at the moment. Please contact the author of this app to get access to the tokens.")
 else:
     st.header(f"Latest episode")
     st.markdown("---")
