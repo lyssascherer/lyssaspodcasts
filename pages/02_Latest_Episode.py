@@ -43,12 +43,14 @@ if bt_get_feed:
         if len(hosts):
             st.markdown(f"**Hosts:**")
             for host in hosts:
-                st.markdown(f"- {host}")
+                host_summary = ut.get_summary_person_on_wikipedia(host)
+                st.expander(f"{host}", expanded=False).markdown(f"{host_summary}")
 
         if len(guests):
             st.markdown(f"**Guests:**")
             for guest in guests:
-                st.markdown(f"- {guest}")
+                guest_summary = ut.get_summary_person_on_wikipedia(guest)
+                st.expander(f"{guest}", expanded=False).markdown(f"{guest_summary}")
         
         if len(key_points):
             st.markdown(f"**Key points:**")
@@ -56,8 +58,8 @@ if bt_get_feed:
                 st.markdown(f"- {key_point}")
 
         st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
+        st.markdown(f"**Keywords** {', '.join(episode_transcription.get('keywords', ['Not available']))}")
 else:
     st.header(f"Latest episode")
     st.markdown("---")
     st.markdown("Check the latest episode of your favorite podcast! Just write the RSS link of the podcast and click 'Get Latest Episode'.")
-

@@ -7,6 +7,7 @@ import streamlit as st
 import re
 import feedparser
 import datetime
+import wikipedia
 
 
 DOWNLOAD_ROOT = ""
@@ -115,3 +116,12 @@ def clean_name(name):
     name = re.sub(r'[^\w\s]', '', name)
     name = re.sub(' +', ' ', name)
     return name
+
+def get_summary_person_on_wikipedia(person_name):
+    try:
+        wikipage = wikipedia.page(person_name, auto_suggest=False)
+        person_summary = wikipedia.summary(wikipage)
+        return person_summary
+    except Exception as e:
+        print(e)
+        return "Person not found on Wikipedia!"

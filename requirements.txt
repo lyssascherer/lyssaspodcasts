@@ -2,3 +2,4 @@ streamlit
 pandas
 modal
 feedparser
+wikipedia

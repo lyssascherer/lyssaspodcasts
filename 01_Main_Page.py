@@ -48,11 +48,18 @@ else:
     for podcast in set(weeks_episodes["podcast_name"].values):
         episodes = weeks_episodes[weeks_episodes["podcast_name"] == podcast]
         with st.expander(f"{podcast} -- {len(episodes)} episodes this week"):
+            cols = st.columns(4)
+            cols[0].write("**Episode Name**")
+            cols[1].write("**Published date**")
+            cols[2].write("**Transcrition status**")
+
             for i, episode in episodes.iterrows():
-                cols = st.columns(3)
+                cols = st.columns(4)
                 cols[0].write(episode["episode_title"])
-                cols[1].write(episode["episode_day"])
-                cols[2].markdown(
+                cols[1].write(str(episode["episode_day"]))
+                is_transcribed = "Not Transcribed" if ut.process_episode(episode["episode_title"]) is None else "Transcribed"
+                cols[2].write(is_transcribed)
+                cols[3].markdown(
                     f'<a href="/My_Podcasts?podcast_name={podcast}&episode_name={episode["episode_title"]}" target="_self">See more</a>',
                     unsafe_allow_html=True,
                 )

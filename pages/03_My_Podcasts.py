@@ -46,12 +46,14 @@ def click_button_transcribe(podcast_name, episode_name):
         if len(hosts):
             st.markdown(f"**Hosts:**")
             for host in hosts:
-                st.markdown(f"- {host}")
+                host_summary = ut.get_summary_person_on_wikipedia(host)
+                st.expander(f"{host}", expanded=False).markdown(f"{host_summary}")
 
         if len(guests):
             st.markdown(f"**Guests:**")
             for guest in guests:
-                st.markdown(f"- {guest}")
+                guest_summary = ut.get_summary_person_on_wikipedia(guest)
+                st.expander(f"{guest}", expanded=False).markdown(f"{guest_summary}")
         
         if len(key_points):
             st.markdown(f"**Key points:**")
@@ -59,6 +61,7 @@ def click_button_transcribe(podcast_name, episode_name):
                 st.markdown(f"- {key_point}")
 
         st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
+        st.markdown(f"**Keywords** {', '.join(episode_transcription.get('keywords', ['Not available']))}")
 
 
 episode = (
@@ -89,16 +92,19 @@ else:
     hosts = episode_transcription.get('hosts', [])
     guests = episode_transcription.get('guests', [])
     key_points = episode_transcription.get('key_points', [])
+    
     st.markdown(f"**Summary:** {episode_transcription.get('summary', 'Not available')}")
     if len(hosts):
         st.markdown(f"**Hosts:**")
         for host in hosts:
-            st.markdown(f"- {host}")
+            host_summary = ut.get_summary_person_on_wikipedia(host)
+            st.expander(f"{host}", expanded=False).markdown(f"{host_summary}")
 
     if len(guests):
         st.markdown(f"**Guests:**")
         for guest in guests:
-            st.markdown(f"- {guest}")
+            guest_summary = ut.get_summary_person_on_wikipedia(guest)
+            st.expander(f"{guest}", expanded=False).markdown(f"{guest_summary}")
     
     if len(key_points):
         st.markdown(f"**Key points:**")
@@ -106,5 +112,6 @@ else:
             st.markdown(f"- {key_point}")
 
     st.markdown(f"**Main output:** {episode_transcription.get('main_output', 'Not available')}")
+    st.markdown(f"**Keywords** {', '.join(episode_transcription.get('keywords', ['Not available']))}")
 
 
